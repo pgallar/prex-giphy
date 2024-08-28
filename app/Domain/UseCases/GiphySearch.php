@@ -5,17 +5,17 @@ use App\Infrastructure\Adapter\Out\Clients\GiphyClient;
 
 class GiphySearch
 {
-    private GiphyClient $repository;
+    private GiphyClient $client;
 
-    public function __construct(GiphyClient $repository)
+    public function __construct(GiphyClient $client)
     {
-        $this->repository = $repository;
+        $this->client = $client;
     }
 
     public function execute(string $search, int $limit=1, $offset=0)
     {
         try {
-            $gifs = $this->repository->search($search, $limit, $offset);
+            $gifs = $this->client->search($search, $limit, $offset);
         } catch (\Exception $ex) {
             return $ex->getTraceAsString();
         }

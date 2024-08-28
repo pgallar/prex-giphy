@@ -1,12 +1,9 @@
 <?php
 namespace App\Infrastructure\Adapter\In\Web\Http\Controllers;
 
-use App\Domain\UseCases\AuthUser;
 use App\Domain\UseCases\GiphyFindByID;
 use App\Domain\UseCases\GiphySearch;
-use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class GiphyController extends Controller
@@ -20,7 +17,10 @@ class GiphyController extends Controller
         $this->giphyFindByID = $giphyFindByID;
     }
 
-    public function search(Request $request)
+    public function search(Request $request):
+        \Illuminate\Foundation\Application|\Illuminate\Http\Response|
+        \Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|
+        \Illuminate\Contracts\Routing\ResponseFactory
     {
         $validator = Validator::make($request->all(), [
             'query' => 'required|string|max:255',
@@ -38,7 +38,7 @@ class GiphyController extends Controller
         return response()->json(['gifs' => $gifs]);
     }
 
-    public function findByID(Request $request, string $id)
+    public function findByID(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         $gifs = $this->giphyFindByID->execute($id);
 
