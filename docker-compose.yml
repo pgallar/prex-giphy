@@ -1,36 +1,39 @@
 version: '3.8'
+name: prexgiphy
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: prex-app
-    container_name: prex-app
-    ports:
-      - "8000:80"
-    volumes:
-      - ./:/var/www/html
-    networks:
-      - app-network
+    db:
+        image: mysql:8.0
+        container_name: prexgiphy-db
+        environment:
+            MYSQL_ROOT_PASSWORD: prexgiphy
+            MYSQL_DATABASE: prexgiphy_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: prexgiphy
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data_prexgiphy:/var/lib/mysql
+        networks:
+            - app-network
 
-  db:
-    image: mysql:8.0
-    container_name: prex-db
-    environment:
-      MYSQL_ROOT_PASSWORD: prex
-      MYSQL_DATABASE: prex_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: prex
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - app-network
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: prexgiphy-app
+        container_name: prexgiphy-app
+        depends_on:
+            - db
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - app-network
 
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  db_data:
+  db_data_prexgiphy:

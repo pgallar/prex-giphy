@@ -32,4 +32,4 @@ RUN php artisan config:cache
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/var/www/html/.docker/run.sh"]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/var/www/html/phpunit.xml" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.563495">
+    <testsuite name="Unit" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.563495">
+      <testsuite name="Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers\GiphyControllerTest" file="/var/www/html/tests/Unit/Infrastructure/Adapter/In/Web/Http/Controllers/GiphyControllerTest.php" tests="2" assertions="4" errors="0" failures="0" skipped="0" time="0.563495">
+        <testcase name="testSearchValidatesRequest" file="/var/www/html/tests/Unit/Infrastructure/Adapter/In/Web/Http/Controllers/GiphyControllerTest.php" line="14" class="Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers\GiphyControllerTest" classname="Tests.Unit.Infrastructure.Adapter.In.Web.Http.Controllers.GiphyControllerTest" assertions="2" time="0.554061"/>
+        <testcase name="testSearchReturnsGifs" file="/var/www/html/tests/Unit/Infrastructure/Adapter/In/Web/Http/Controllers/GiphyControllerTest.php" line="32" class="Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers\GiphyControllerTest" classname="Tests.Unit.Infrastructure.Adapter.In.Web.Http.Controllers.GiphyControllerTest" assertions="2" time="0.009434"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

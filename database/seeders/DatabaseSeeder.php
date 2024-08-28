@@ -15,12 +15,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
         DB::table('users')->insert([
-            'name' => 'Pablo Gallar',
-            'email' => 'pablo.gallar@gmail.com',
+            'name' => 'Prex Giphy',
+            'email' => 'prexgiphy@gmail.com',
             'password' => Hash::make('!ragnar121'),
+        ]);
+
+        DB::table('oauth_clients')->insert([
+            'id' => 1,
+            'user_id' => 1,
+            'name' => 'Laravel Password Grant Client',
+            'secret' => '$2y$10$b6mG1fVf2asJlqXgQsHQH.tGdl3EU/UZ9ESMnw5nDt6P6VckvwEYC',
+            'provider' => 'users',
+            'redirect' => 'http://localhost',
+            'personal_access_client' => 0,
+            'password_client' => 1,
+            'revoked' => 0,
+            'created_at' => '2024-08-28 16:18:53',
+            'updated_at' => '2024-08-28 16:18:53',
         ]);
     }
 }
