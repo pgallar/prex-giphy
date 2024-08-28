@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
-use App\Domain\Entities\UserFavorite;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 use Mockery;
 use App\Domain\UseCases\AddUserFavorite;
 use App\Infrastructure\Adapter\In\Web\Http\Controllers\UserController;
+use App\Domain\Entities\UserFavorite;
 
 class UserControllerTest extends TestCase
 {

@@ -27,6 +27,7 @@ final class GiphyClient implements GiphyClientContract
             $data['pagination']['count'],
             $data['pagination']['offset'],
         );
+        $gifSearch->gifs = array();
 
         foreach ($data['data'] as $gif) {
             $gifSearch->gifs[] = new Gif(
