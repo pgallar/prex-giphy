@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prex-app
+    container_name: prex-app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    container_name: prex-db
+    environment:
+      MYSQL_ROOT_PASSWORD: prex
+      MYSQL_DATABASE: prex_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: prex
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
