@@ -19,23 +19,26 @@ final class GiphyClient implements GiphyClientContract
             'offset' => $offset,
         ]);
 
-        $gifSearch = new Gifs;
         $data =  $response->json();
-
-        $gifSearch->pagination = new Pagination(
-            $data['pagination']['total_count'],
-            $data['pagination']['count'],
-            $data['pagination']['offset'],
+        $gifSearch = new Gifs(
+            [],
+            new Pagination(
+                $data['pagination']['total_count'],
+                $data['pagination']['count'],
+                $data['pagination']['offset'],
+            )
         );
-        $gifSearch->gifs = array();
 
+        $gifs = array();
         foreach ($data['data'] as $gif) {
-            $gifSearch->gifs[] = new Gif(
+            $gifs[] = new Gif(
                 $gif['id'],
                 $gif['url'],
                 $gif['title'],
             );
         }
+
+        $gifSearch->gifs = $gifs;
 
         return $gifSearch;
     }

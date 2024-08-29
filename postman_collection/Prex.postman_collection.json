@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "bc2c92ca-e4cd-4da8-b359-2d2f54a80c8d",
+		"name": "Prex",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23298502"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{prex_host}}/v1/auth/signin",
+							"host": [
+								"{{prex_host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "gifs",
+			"item": [
+				{
+					"name": "search",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{prex_host}}/v1/gif/search?query=cat&limit=10&offset=0",
+							"host": [
+								"{{prex_host}}"
+							],
+							"path": [
+								"v1",
+								"gif",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "cat"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{prex_host}}/v1/gif/:gifID",
+							"host": [
+								"{{prex_host}}"
+							],
+							"path": [
+								"v1",
+								"gif",
+								":gifID"
+							],
+							"variable": [
+								{
+									"key": "gifID",
+									"value": "BBNYBoYa5VwtO",
+									"description": "Gif ID from Giphy"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "addFavorite",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gif_id\": \"MDJ9IbxxvDUQM\",\r\n    \"alias\": \"gif test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{prex_host}}/v1/user/favorite",
+							"host": [
+								"{{prex_host}}"
+							],
+							"path": [
+								"v1",
+								"user",
+								"favorite"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.sendRequest({\r",
+					"    url: pm.environment.get(\"prex_host\") + '/v1/auth/signin',\r",
+					"    method: 'POST',\r",
+					"    header: {\r",
+					"        'content-type': 'application/json'\r",
+					"    },\r",
+					"    body: {\r",
+					"        mode: 'raw',\r",
+					"        raw: JSON.stringify({ \r",
+					"            email: pm.environment.get(\"email\"), \r",
+					"            password: pm.environment.get(\"password\") })\r",
+					"    }\r",
+					"}, function (err, res) {\r",
+					"    pm.environment.set(\"auth\", res.json().token.access_token);\r",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

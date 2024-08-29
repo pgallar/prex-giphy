@@ -30,7 +30,8 @@ No es necesario ejecutar las migraciones, ya que las mismas se generan junto con
 
 ## Tests Unitarios
 
-He creado algunos tests unitarios para asegurarme de que todo funcione como debe. Aquí te dejamos una lista de los tests que hemos generado:
+He creado algunos tests unitarios para asegurarme de que todo funcione como debe.
+Aqui se listan los test unitarios generados:
 
 - `AuthControllerTest`
   - `testSigninValidatesRequest`
@@ -54,6 +55,27 @@ He creado algunos tests unitarios para asegurarme de que todo funcione como debe
   - `testSearchReturnsEmptyGifsWhenNoResults`
   - `testFindByIDReturnsGif`
   - `testFindByIDReturnsNullWhenGifNotFound`
+
+## Tests Feature
+
+He creado algunos tests feature para asegurarme de que todos los controladores responden correctamente para cada caso.
+Aqui dejo una lista de todos los test feature generados:
+
+### `AuthControllerTest`
+- `testSigninReturnsTokenForValidCredentials`
+- `testSigninReturnsUnauthorizedForInvalidCredentials`
+- `testSigninReturnsBadRequestForInvalidData`
+
+### `GiphyControllerTest`
+- `testSearchReturnsGifsSuccessfully`
+- `testSearchReturnsBadRequestForInvalidData`
+- `testFindByIDReturnsGifSuccessfully`
+- `testFindByIDReturnsNotFoundForInvalidID`
+
+### `UserControllerTest`
+- `testAddFavoriteSuccessfully`
+- `testAddFavoriteReturnsConflictForDuplicateEntry`
+- `testAddFavoriteReturnsBadRequestForInvalidData`
 
 ### Cómo Ejecutar los Tests
 
@@ -79,7 +101,9 @@ Este comando correrá todos los tests y mostrará los resultados en la terminal.
 ## Diagrama de casos de uso
 
 Acceder desde: https://excalidraw.com/#room=7b9f0759b0eefb68690c,Ms9R2CFfxF9_nJXieat41A
-También ver achivo: [diagrama_casos_uso.png](diagrama_casos_uso.png)
+También ver achivo: [diagrama_casos_uso.png](diagrama_casos_uso.png) o [diagrama_casos_uso.pdf](diagrama_casos_uso.pdf)
+
+
 ## Diagrama entidad relación (DER)
 
 ```
@@ -103,3 +127,30 @@ User favorites (user_favorites)
 - updated_at: timestamp
                                
 ```
+
+---
+
+## Registro continuo de actividades
+
+En el archivo que se genera [storage/logs/laravel.log](storage/logs/laravel.log), se registran todas los REQUEST y RESPONSE que se generan via API Rest.
+Estos registros cuentan con la siguiente información:
+
+- Usuario que realizo la petición
+- Servicio consultado
+- Cuerpo de la petición
+- Código HTTP de la respuesta.
+- Cuerpo de la respuesta.
+- IP de origen de la consulta.
+
+Ejemplo:
+```logs
+[2024-08-29 22:28:12] local.INFO: incoming request {"USER_ID":1,"REQUEST_BODY":{"query":"cat","limit":"10","offset":"0"},"STATUS":200,"RESPONSE":"{\"gifs\":{\"gifs\":[{\"id\":\"CjmvTCZf2U3p09Cn0h\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/leroypatterson-cat-glasses-CjmvTCZf2U3p09Cn0h\",\"title\":\"Im Ready Lets Go GIF by Leroy Patterson\"},{\"id\":\"MDJ9IbxxvDUQM\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/cat-kisses-hugs-MDJ9IbxxvDUQM\",\"title\":\"In Love Cat GIF\"},{\"id\":\"mlvseq9yvZhba\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/funny-cat-mlvseq9yvZhba\",\"title\":\"Bored Cat GIF\"},{\"id\":\"GeimqsH0TLDt4tScGw\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/vibes-vibing-vibin-GeimqsH0TLDt4tScGw\",\"title\":\"Vibing White Cat GIF\"},{\"id\":\"8vQSQ3cNXuDGo\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/cat-moment-remember-8vQSQ3cNXuDGo\",\"title\":\"Cat Remember GIF\"},{\"id\":\"l0ExdMHUDKteztyfe\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/smoke-smoking-chibi-l0ExdMHUDKteztyfe\",\"title\":\"cat smoking GIF by sheepfilms\"},{\"id\":\"C9x8gX02SnMIoAClXa\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/C9x8gX02SnMIoAClXa\",\"title\":\"Cat Sunglasses GIF\"},{\"id\":\"lJNoBCvQYp7nq\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/reddit-doing-lJNoBCvQYp7nq\",\"title\":\"Cat Working GIF\"},{\"id\":\"vFKqnCdLPNOKc\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/cat-lol-vFKqnCdLPNOKc\",\"title\":\"White Cat Hello GIF\"},{\"id\":\"IzQySOB4vcL7ttdqqN\",\"url\":\"https:\\/\\/giphy.com\\/gifs\\/cat-crazy-blue-IzQySOB4vcL7ttdqqN\",\"title\":\"Cat Yes GIF by happydog\"}],\"pagination\":{\"total_count\":500,\"limit\":10,\"offset\":0}}}","IP":"172.19.0.1"} 
+```
+
+---
+
+## Colección de POSTMAN
+
+Collection: [Prex.postman_collection.json](postman_collection/Prex.postman_collection.json)
+
+Environment: [postman_collection/](storage/logs/laravel.log)[local.postman_environment.json](postman_collection/local.postman_environment.json)

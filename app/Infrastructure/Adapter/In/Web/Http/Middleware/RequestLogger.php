@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\isNull;
 
 
 class RequestLogger
@@ -30,11 +31,14 @@ class RequestLogger
         $route = $request->route();
         $requestBody = $request->all();
 
-        if (empty($requestBody)) {
-            $requestBody = $route->parameters;
+        if (!isNull($route)) {
+            if (empty($requestBody)) {
+                $requestBody = $route->parameters;
+            }
+
+            $log['SERVICE_NAME'] = $route->getName();
         }
 
-        $log['SERVICE_NAME'] = $route->getName();
         $log['REQUEST_BODY'] = $requestBody;
         $log['STATUS'] = $response->status();
         $log['RESPONSE'] = $response->getContent();

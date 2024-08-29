@@ -2,12 +2,11 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
+use App\Domain\UseCases\AuthUser;
+use App\Infrastructure\Adapter\In\Web\Http\Controllers\AuthController;
 use App\Infrastructure\Adapter\In\Web\Http\Requests\SigninRequest;
-use Illuminate\Http\Request;
 use Mockery;
 use Tests\TestCase;
-use App\Infrastructure\Adapter\In\Web\Http\Controllers\AuthController;
-use App\Domain\UseCases\AuthUser;
 
 class AuthControllerTest extends TestCase
 {

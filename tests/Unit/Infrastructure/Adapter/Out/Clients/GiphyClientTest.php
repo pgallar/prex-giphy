@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\Out\Clients;
 
-use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 use App\Domain\Entities\Gif;
 use App\Domain\Entities\Gifs;
@@ -31,7 +30,7 @@ class GiphyClientTest extends TestCase
         $this->assertInstanceOf(Gifs::class, $result);
         $this->assertEmpty($result->gifs);
         $this->assertEquals(0, $result->pagination->total_count);
-        $this->assertEquals(0, $result->pagination->count);
+        $this->assertEquals(0, $result->pagination->limit);
         $this->assertEquals(0, $result->pagination->offset);
     }
 

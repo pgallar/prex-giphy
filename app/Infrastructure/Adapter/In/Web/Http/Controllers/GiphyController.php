@@ -37,13 +37,7 @@ class GiphyController extends Controller
         \Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|
         \Illuminate\Contracts\Routing\ResponseFactory
     {
-        try {
-            $request->validate($request->rules());
-        }
-        catch(ValidationException $validEx) {
-            return response(['errors' => $validEx->getMessage()], 400);
-        }
-
+        $request->validate($request->rules());
         $gifs = $this->giphySearch->execute($request->getQuery(), $request->getLimit(), $request->getOffset());
 
         return response()->json(['gifs' => $gifs]);

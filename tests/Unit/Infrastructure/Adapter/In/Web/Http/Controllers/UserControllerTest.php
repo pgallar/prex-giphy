@@ -2,16 +2,14 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
-use App\Domain\Entities\User;
-use App\Infrastructure\Adapter\In\Web\Http\Requests\UserFavoriteRequest;
-use Illuminate\Http\Request;
-use Tests\TestCase;
-use Mockery;
+use App\Domain\Entities\UserFavorite;
 use App\Domain\UseCases\AddUserFavorite;
 use App\Infrastructure\Adapter\In\Web\Http\Controllers\UserController;
-use App\Domain\Entities\UserFavorite;
+use App\Infrastructure\Adapter\In\Web\Http\Requests\UserFavoriteRequest;
+use Mockery;
+use Tests\Shared\Web\Http\Controllers\AuthenticatedControllerTest;
 
-class UserControllerTest extends TestCase
+class UserControllerTest extends AuthenticatedControllerTest
 {
     public function testAddFavoriteValidatesRequest()
     {
@@ -85,15 +83,5 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(['favorite' => $favorite->toArray()], json_decode($response->getContent(), true));
-    }
-
-    private function setAuthenticatedUser(): void
-    {
-        $user = new User([
-            'id' => 1,
-            'name' => 'PrexGiphy'
-        ]);
-        $user->setAttribute('id', 1);
-        $this->actingAs($user);
     }
 }
