@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
+use App\Domain\Entities\User;
+use App\Infrastructure\Adapter\In\Web\Http\Requests\UserFavoriteRequest;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 use Mockery;
@@ -16,7 +18,7 @@ class UserControllerTest extends TestCase
         $addUserFavorite = Mockery::mock(AddUserFavorite::class);
         $controller = new UserController($addUserFavorite);
 
-        $request = Request::create('/add-favorite', 'POST', [
+        $request = UserFavoriteRequest::create('/v1/user/favorite', 'POST', [
             'gif_id' => '',
             'alias' => '',
             'user_id' => -1,
@@ -24,7 +26,7 @@ class UserControllerTest extends TestCase
 
         $response = $controller->addFavorite($request);
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('errors', json_decode($response->getContent(), true));
     }
 
@@ -32,13 +34,12 @@ class UserControllerTest extends TestCase
     {
         $addUserFavorite = Mockery::mock(AddUserFavorite::class);
         $addUserFavorite->shouldReceive('execute')->andReturn('Duplicate entry');
-
         $controller = new UserController($addUserFavorite);
 
-        $request = Request::create('/add-favorite', 'POST', [
+        $this->setAuthenticatedUser();
+        $request = UserFavoriteRequest::create('/v1/user/favorite', 'POST', [
             'gif_id' => 'some_gif_id',
             'alias' => 'My Favorite Gif',
-            'user_id' => 1,
         ]);
 
         $response = $controller->addFavorite($request);
@@ -51,10 +52,10 @@ class UserControllerTest extends TestCase
     {
         $addUserFavorite = Mockery::mock(AddUserFavorite::class);
         $addUserFavorite->shouldReceive('execute')->andReturn('Some other error');
-
         $controller = new UserController($addUserFavorite);
 
-        $request = Request::create('/add-favorite', 'POST', [
+        $this->setAuthenticatedUser();
+        $request = UserFavoriteRequest::create('/v1/user/favorite', 'POST', [
             'gif_id' => 'BBNYBoYa5VwtO',
             'alias' => 'My Favorite Gif',
             'user_id' => 1,
@@ -71,10 +72,10 @@ class UserControllerTest extends TestCase
         $addUserFavorite = Mockery::mock(AddUserFavorite::class);
         $favorite = new UserFavorite(['gif_id' => 'BBNYBoYa5VwtO', 'alias' => 'My Favorite Gif', 'user_id' => 1]);
         $addUserFavorite->shouldReceive('execute')->andReturn($favorite);
-
         $controller = new UserController($addUserFavorite);
 
-        $request = Request::create('/add-favorite', 'POST', [
+        $this->setAuthenticatedUser();
+        $request = UserFavoriteRequest::create('/v1/user/favorite', 'POST', [
             'gif_id' => 'BBNYBoYa5VwtO',
             'alias' => 'My Favorite Gif',
             'user_id' => 1,
@@ -84,5 +85,15 @@ class UserControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(['favorite' => $favorite->toArray()], json_decode($response->getContent(), true));
+    }
+
+    private function setAuthenticatedUser(): void
+    {
+        $user = new User([
+            'id' => 1,
+            'name' => 'PrexGiphy'
+        ]);
+        $user->setAttribute('id', 1);
+        $this->actingAs($user);
     }
 }

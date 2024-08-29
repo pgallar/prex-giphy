@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
+use App\Infrastructure\Adapter\In\Web\Http\Requests\GiphySearchRequest;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 use Mockery;
@@ -18,7 +19,7 @@ class GiphyControllerTest extends TestCase
         $giphyFindByID = Mockery::mock(GiphyFindByID::class);
         $controller = new GiphyController($giphySearch, $giphyFindByID);
 
-        $request = Request::create('/search', 'GET', [
+        $request = GiphySearchRequest::create('/v1/gif/search', 'GET', [
             'query' => '',
             'limit' => 0,
             'offset' => -1,
@@ -26,7 +27,7 @@ class GiphyControllerTest extends TestCase
 
         $response = $controller->search($request);
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('errors', json_decode($response->getContent(), true));
     }
 
@@ -38,7 +39,7 @@ class GiphyControllerTest extends TestCase
 
         $controller = new GiphyController($giphySearch, $giphyFindByID);
 
-        $request = Request::create('/search', 'GET', [
+        $request = GiphySearchRequest::create('/v1/gif/search', 'GET', [
             'query' => 'cats',
             'limit' => 5,
             'offset' => 0,

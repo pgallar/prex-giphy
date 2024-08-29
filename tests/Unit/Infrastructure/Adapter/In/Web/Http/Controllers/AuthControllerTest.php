@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Infrastructure\Adapter\In\Web\Http\Controllers;
 
+use App\Infrastructure\Adapter\In\Web\Http\Requests\SigninRequest;
 use Illuminate\Http\Request;
 use Mockery;
 use Tests\TestCase;
@@ -15,14 +16,14 @@ class AuthControllerTest extends TestCase
         $authUser = Mockery::mock(AuthUser::class);
         $controller = new AuthController($authUser);
 
-        $request = Request::create('/signin', 'POST', [
+        $request = SigninRequest::create('/signin', 'POST', [
             'email' => 'invalid-email',
             'password' => 'short',
         ]);
 
         $response = $controller->signin($request);
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('errors', json_decode($response->getContent(), true));
     }
 
@@ -33,7 +34,7 @@ class AuthControllerTest extends TestCase
 
         $controller = new AuthController($authUser);
 
-        $request = Request::create('/signin', 'POST', [
+        $request = SigninRequest::create('/signin', 'POST', [
             'email' => 'giphy@prex.com.ar',
             'password' => 'invalid-password',
         ]);
@@ -51,7 +52,7 @@ class AuthControllerTest extends TestCase
 
         $controller = new AuthController($authUser);
 
-        $request = Request::create('/signin', 'POST', [
+        $request = SigninRequest::create('/signin', 'POST', [
             'email' => 'giphy@prex.com.ar',
             'password' => 'correct-password',
         ]);

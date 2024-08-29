@@ -3,8 +3,9 @@ namespace App\Infrastructure\Adapter\In\Web\Http\Controllers;
 
 use App\Domain\UseCases\GiphyFindByID;
 use App\Domain\UseCases\GiphySearch;
+use App\Infrastructure\Adapter\In\Web\Http\Requests\GiphySearchRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class GiphyController extends Controller
 {
@@ -17,23 +18,19 @@ class GiphyController extends Controller
         $this->giphyFindByID = $giphyFindByID;
     }
 
-    public function search(Request $request):
+    public function search(GiphySearchRequest $request):
         \Illuminate\Foundation\Application|\Illuminate\Http\Response|
         \Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|
         \Illuminate\Contracts\Routing\ResponseFactory
     {
-        $validator = Validator::make($request->all(), [
-            'query' => 'required|string|max:255',
-            'limit' => 'int|min:1',
-            'offset' => 'int|min:0',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
+        try {
+            $request->validate($request->rules());
+        }
+        catch(ValidationException $validEx) {
+            return response(['errors' => $validEx->getMessage()], 400);
         }
 
-        $gifs = $this->giphySearch->execute($request['query'], (int)$request->limit, (int)$request->offset);
+        $gifs = $this->giphySearch->execute($request->getQuery(), $request->getLimit(), $request->getOffset());
 
         return response()->json(['gifs' => $gifs]);
     }

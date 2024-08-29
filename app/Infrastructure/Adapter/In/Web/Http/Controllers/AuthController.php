@@ -2,8 +2,8 @@
 namespace App\Infrastructure\Adapter\In\Web\Http\Controllers;
 
 use App\Domain\UseCases\AuthUser;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Infrastructure\Adapter\In\Web\Http\Requests\SigninRequest;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -14,19 +14,20 @@ class AuthController extends Controller
         $this->authUser = $authUser;
     }
 
-    public function signin(Request $request)
+    public function signin(SigninRequest $request):
+        \Illuminate\Foundation\Application|\Illuminate\Http\Response|
+        \Illuminate\Http\JsonResponse|
+        \Illuminate\Contracts\Foundation\Application|
+        \Illuminate\Contracts\Routing\ResponseFactory
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
+        try {
+            $request->validate($request->rules());
+        }
+        catch(ValidationException $validEx) {
+            return response(['errors' => $validEx->getMessage()], 400);
         }
 
-        $token = $this->authUser->execute($request->email, $request->password);
+        $token = $this->authUser->execute($request->getEmail(), $request->getPassword());
 
         if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);

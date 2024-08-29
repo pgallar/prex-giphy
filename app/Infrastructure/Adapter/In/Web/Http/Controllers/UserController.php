@@ -2,13 +2,9 @@
 namespace App\Infrastructure\Adapter\In\Web\Http\Controllers;
 
 use App\Domain\UseCases\AddUserFavorite;
-use App\Domain\UseCases\AuthUser;
-use App\Domain\UseCases\GiphyFindByID;
-use App\Domain\UseCases\GiphySearch;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use App\Infrastructure\Adapter\In\Web\Http\Requests\UserFavoriteRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class UserController extends Controller
@@ -20,24 +16,24 @@ class UserController extends Controller
         $this->addUserFavorite = $addUserFavorite;
     }
 
-    public function addFavorite(Request $request):
+    public function addFavorite(UserFavoriteRequest $request):
         \Illuminate\Foundation\Application|\Illuminate\Http\Response|
         \Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|
         \Illuminate\Contracts\Routing\ResponseFactory
     {
-        $validator = Validator::make($request->all(), [
-            'gif_id' => 'required|string|max:50',
-            'alias' => 'required|string|max:100',
-            'user_id' => 'int|min:0',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
+        try {
+            $request->validate($request->rules());
+        }
+        catch(ValidationException $validEx) {
+            return response(['errors' => $validEx->getMessage()], 400);
         }
 
         try {
-            $result = $this->addUserFavorite->execute($request->gif_id, (int)$request->user_id, $request->alias);
+            $result = $this->addUserFavorite->execute(
+                $request->getGifID(),
+                Auth::user()->getAuthIdentifier(),
+                $request->getAlias()
+            );
 
             if (is_string($result)) {
                 if (str_contains($result, 'Duplicate entry')) {
