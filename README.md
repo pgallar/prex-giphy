@@ -1,7 +1,7 @@
 
 # Prex Giphy
 
-## Ejecutar el Proyecto con Docker Compose
+## Ejecutar el proyecto con Docker Compose
 
 Para poner en marcha este proyecto, necesitas tener Docker y Docker Compose instalados en tu máquina. Sigue estos pasos:
 
