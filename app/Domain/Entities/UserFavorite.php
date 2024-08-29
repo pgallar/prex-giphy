@@ -11,7 +11,7 @@ class UserFavorite extends Model
 
     protected $fillable = ['id', 'user_id', 'gif_id', 'alias'];
 
-    public function User()
+    public function User(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }

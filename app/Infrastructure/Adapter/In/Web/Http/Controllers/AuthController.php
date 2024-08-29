@@ -9,11 +9,22 @@ class AuthController extends Controller
 {
     private AuthUser $authUser;
 
+    /**
+     * @param AuthUser $authUser Inyección del caso de uso AuthUser.
+     */
     public function __construct(AuthUser $authUser)
     {
         $this->authUser = $authUser;
     }
 
+    /**
+     * Valida las credenciales del usuario (email, password)
+     * si los datos enviados no son correctos, retorna 400 Bad Request,
+     * de lo contrario, retorna un token de acceso o HTTP Status 401 UnAuthorized.
+     *
+     * @param SigninRequest $request
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+     */
     public function signin(SigninRequest $request):
         \Illuminate\Foundation\Application|\Illuminate\Http\Response|
         \Illuminate\Http\JsonResponse|

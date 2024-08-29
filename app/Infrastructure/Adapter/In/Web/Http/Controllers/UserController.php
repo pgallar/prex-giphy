@@ -11,11 +11,22 @@ class UserController extends Controller
 {
     private AddUserFavorite $addUserFavorite;
 
+    /**
+     * @param AddUserFavorite $addUserFavorite
+     */
     public function __construct(AddUserFavorite $addUserFavorite)
     {
         $this->addUserFavorite = $addUserFavorite;
     }
 
+    /**
+     * Adiciona favorito al usuario autenticado.
+     * Si el favorito ya ha sido adicionado anteriormente para el usuario,
+     * entonces, retorna error 401 Conflict
+     *
+     * @param UserFavoriteRequest $request
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+     */
     public function addFavorite(UserFavoriteRequest $request):
         \Illuminate\Foundation\Application|\Illuminate\Http\Response|
         \Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|
